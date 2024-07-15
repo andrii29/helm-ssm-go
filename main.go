@@ -56,7 +56,7 @@ func main() {
 		ssmClient := ssm.NewFromConfig(cfg)
 
 		// Get the parameter values from SSM
-		paramValuesInRegion, err := getSSMParameters(ssmClient, paramPaths)
+		paramValuesInRegion, err := getSSMParameters(ssmClient, paramPaths, region)
 		if err != nil {
 			log.Fatalf("failed to get SSM parameters: %v", err)
 		}
@@ -70,11 +70,13 @@ func main() {
 	// Replace each match with the actual SSM parameter value
 	for _, match := range matches {
 		paramPath := match[1]
+		region := match[2]
 		placeholder := match[0]
-		if paramValue, ok := paramValues[paramPath]; ok {
+		regionSpecificKey := fmt.Sprintf("%s:%s", region, paramPath)
+		if paramValue, ok := paramValues[regionSpecificKey]; ok {
 			data = []byte(strings.ReplaceAll(string(data), placeholder, paramValue))
 		} else {
-			log.Fatalf("SSM parameter %s not found or empty", paramPath)
+			log.Fatalf("SSM parameter %s not found or empty in region %s", paramPath, region)
 		}
 	}
 
@@ -82,7 +84,7 @@ func main() {
 	fmt.Println(string(data))
 }
 
-func getSSMParameters(client *ssm.Client, paramPaths []string) (map[string]string, error) {
+func getSSMParameters(client *ssm.Client, paramPaths []string, region string) (map[string]string, error) {
 	input := &ssm.GetParametersInput{
 		Names:          paramPaths,
 		WithDecryption: aws.Bool(true),
@@ -98,7 +100,8 @@ func getSSMParameters(client *ssm.Client, paramPaths []string) (map[string]strin
 		if param.Value == nil || *param.Value == "" {
 			return nil, fmt.Errorf("SSM parameter %s not found or empty", *param.Name)
 		}
-		paramValues[*param.Name] = *param.Value
+		regionSpecificKey := fmt.Sprintf("%s:%s", region, *param.Name)
+		paramValues[regionSpecificKey] = *param.Value
 	}
 
 	return paramValues, nil
