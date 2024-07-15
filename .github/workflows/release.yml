@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        goos: [linux, darwin, windows]
+        goos: [linux]
         goarch: [amd64, arm64]
         include:
           - goos: linux
@@ -31,6 +31,7 @@ jobs:
       - name: Build binary
         run: |
           mkdir -p bin
+          go mod tidy
           GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o bin/ssm-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }} main.go
 
       - name: Upload binaries to release
