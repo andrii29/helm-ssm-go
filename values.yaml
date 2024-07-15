@@ -1,0 +1,4 @@
+database:
+  password: "{{ssm /path/to/parameter eu-west-1}}"
+api:
+  token: "{{ssm /path/to/another/parameter sa-east-1}}"
