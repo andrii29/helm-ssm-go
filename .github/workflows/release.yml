@@ -32,7 +32,7 @@ jobs:
         run: |
           mkdir -p bin
           go get .
-          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o bin/ssm-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }} main.go
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -o bin/ssm-go-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.ext }} main.go
 
       - name: Upload binaries to release
         uses: softprops/action-gh-release@v1
