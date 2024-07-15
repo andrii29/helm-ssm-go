@@ -1,12 +1,12 @@
 name: "ssm-go"
-version: "0.3.0"
+version: "0.3.1"
 usage: "A Helm plugin to replace SSM parameters in values.yaml"
 description: |
   This plugin replaces placeholders in the format {{ssm /path/to/parameter region}}
   with actual values from AWS SSM Parameter Store.
 hooks:
   install: |
-    VERSION=${VERSION:-0.3.0}
+    VERSION=${VERSION:-0.3.1}
     ARCH=${ARCH:-amd64}
 
     # Using curl
