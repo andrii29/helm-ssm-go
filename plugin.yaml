@@ -9,7 +9,7 @@ hooks:
     VERSION=${VERSION:-0.3.0}
     ARCH=${ARCH:-amd64}
 
-    $ Using curl
+    # Using curl
     if command -v curl >/dev/null; then
       curl -L -o ssm-go https://github.com/andrii29/helm-ssm-go/releases/download/$VERSION/ssm-go-linux-$ARCH
     # Using wget as fallback
