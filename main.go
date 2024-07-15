@@ -73,6 +73,8 @@ func main() {
 		placeholder := match[0]
 		if paramValue, ok := paramValues[paramPath]; ok {
 			data = []byte(strings.ReplaceAll(string(data), placeholder, paramValue))
+		} else {
+			log.Fatalf("SSM parameter %s not found or empty", paramPath)
 		}
 	}
 
@@ -93,6 +95,9 @@ func getSSMParameters(client *ssm.Client, paramPaths []string) (map[string]strin
 
 	paramValues := make(map[string]string)
 	for _, param := range result.Parameters {
+		if param.Value == nil || *param.Value == "" {
+			return nil, fmt.Errorf("SSM parameter %s not found or empty", *param.Name)
+		}
 		paramValues[*param.Name] = *param.Value
 	}
 
