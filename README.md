@@ -7,13 +7,13 @@ This plugin replaces placeholders in the format `{{ssm /path/to/parameter region
 To install the plugin, run the following command:
 
 ```sh
-helm plugin install https://github.com/andrii29/helm-ssm-go
+helm plugin install https://github.com/sport-labs-group/helm-ssm-go
 ```
 To install specific version of plugin or architecture, run the following commands
 ```sh
-export VERSION='0.4.0'
+export VERSION='0.5.0'
 export ARCH='arm64
-helm plugin install https://github.com/andrii29/helm-ssm-go
+helm plugin install https://github.com/sport-labs-group/helm-ssm-go
 ```
 ## Usage
 ```sh
