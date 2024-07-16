@@ -85,23 +85,32 @@ func main() {
 }
 
 func getSSMParameters(client *ssm.Client, paramPaths []string, region string) (map[string]string, error) {
-	input := &ssm.GetParametersInput{
-		Names:          paramPaths,
-		WithDecryption: aws.Bool(true),
-	}
-
-	result, err := client.GetParameters(context.TODO(), input)
-	if err != nil {
-		return nil, err
-	}
-
+	const maxParamsPerRequest = 10
 	paramValues := make(map[string]string)
-	for _, param := range result.Parameters {
-		if param.Value == nil || *param.Value == "" {
-			return nil, fmt.Errorf("SSM parameter %s not found or empty", *param.Name)
+
+	for i := 0; i < len(paramPaths); i += maxParamsPerRequest {
+		end := i + maxParamsPerRequest
+		if end > len(paramPaths) {
+			end = len(paramPaths)
 		}
-		regionSpecificKey := fmt.Sprintf("%s:%s", region, *param.Name)
-		paramValues[regionSpecificKey] = *param.Value
+
+		input := &ssm.GetParametersInput{
+			Names:          paramPaths[i:end],
+			WithDecryption: aws.Bool(true),
+		}
+
+		result, err := client.GetParameters(context.TODO(), input)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, param := range result.Parameters {
+			if param.Value == nil || *param.Value == "" {
+				return nil, fmt.Errorf("SSM parameter %s not found or empty", *param.Name)
+			}
+			regionSpecificKey := fmt.Sprintf("%s:%s", region, *param.Name)
+			paramValues[regionSpecificKey] = *param.Value
+		}
 	}
 
 	return paramValues, nil

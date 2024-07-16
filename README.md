@@ -11,7 +11,7 @@ helm plugin install https://github.com/andrii29/helm-ssm-go
 ```
 To install specific version of plugin or architecture, run the following commands
 ```sh
-export VERSION='0.4.0'
+export VERSION='0.5.0'
 export ARCH='arm64
 helm plugin install https://github.com/andrii29/helm-ssm-go
 ```
