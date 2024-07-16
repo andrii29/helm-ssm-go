@@ -11,7 +11,7 @@ helm plugin install https://github.com/andrii29/helm-ssm-go
 ```
 To install specific version of plugin or architecture, run the following commands
 ```sh
-export VERSION='0.2.0'
+export VERSION='0.4.0'
 export ARCH='arm64
 helm plugin install https://github.com/andrii29/helm-ssm-go
 ```
@@ -20,3 +20,6 @@ helm plugin install https://github.com/andrii29/helm-ssm-go
 helm ssm -f values.yaml
 ```
 Command reads data from values.yaml file print to stdout content with replaced ssm params
+
+## Credentials
+Use [environment variables](https://docs.aws.amazon.com/cli/v1/userguide/cli-configure-envvars.html) `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` or any other supported way to [configure](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) aws cli
